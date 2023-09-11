@@ -26,7 +26,7 @@ SECRET_KEY = Config.SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1:8000', 'sgamare32.pythonanywhere.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'sgamare32.pythonanywhere.com']
 
 # Application definition
 
@@ -126,7 +126,6 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-# EMAIL_PORT = 465  # change to this when app is live
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = Config.EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD = Config.EMAIL_HOST_PASSWORD
