@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = Config.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = Config.DEBUG
 
 ALLOWED_HOSTS = ['127.0.0.1', 'sgamare32.pythonanywhere.com']
 
@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'accounts'
+    'accounts',
+    'products'
 ]
 
 MIDDLEWARE = [
@@ -133,6 +134,8 @@ EMAIL_HOST_PASSWORD = Config.EMAIL_HOST_PASSWORD
 
 REST_FRAMEWORK = {
     # 'EXCEPTION_HANDLER': 'ecom.exceptions.custom_exception_handler',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 3
 }
 
 SIMPLE_JWT = {
@@ -140,5 +143,4 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ALGORITHM": "HS256",
     "AUTH_HEADER_TYPES": ("Bearer",),
-
 }

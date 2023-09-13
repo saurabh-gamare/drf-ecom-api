@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import AuthSerializer
@@ -86,12 +85,4 @@ class Login(APIView):
                 'access': str(refresh.access_token)
             }
         })
-
-
-class Test(APIView):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get(self, request):
-        return Response({'response': request.data})
 
