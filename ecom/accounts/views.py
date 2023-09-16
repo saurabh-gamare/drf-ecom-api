@@ -10,7 +10,6 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.contrib.auth import get_user_model
 from ecom.utils import get_error_response
 
-
 User = get_user_model()
 
 
@@ -72,7 +71,11 @@ class Login(APIView):
         email = data.get('email')
         otp = data.get('otp')
         self.check_required_fields(email, otp)
-        user_instance = User.objects.get(email=email)
+        try:
+            user_instance = User.objects.get(email=email)
+        except Exception:
+            err_response = get_error_response(message=f'Sorry, {email} was not found')
+            raise exceptions.NotFound(err_response)
         if str(otp) != str(user_instance.otp):
             err_response = get_error_response(message='Please enter correct OTP')
             raise exceptions.ValidationError(err_response)
