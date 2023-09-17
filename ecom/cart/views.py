@@ -35,7 +35,6 @@ class CartDetail(APIView):
         for details in cart_details:
             try:
                 product_details = Product.objects.get(id=details.get('product_id'))
-                print(float(product_details.mrp), 'mrp')
             except Exception:
                 err_response = get_error_response(message=f'Product Id {details.get("product_id")} was not found')
                 raise exceptions.NotFound(err_response)
@@ -45,8 +44,8 @@ class CartDetail(APIView):
             total_sale_price += sale_price
         cart_details = {
             'user': request.user.id,
-            'total_mrp': total_mrp,
-            'total_sale_price': total_sale_price
+            'total_mrp': round(total_mrp, 2),
+            'total_sale_price': round(total_sale_price, 2)
         }
         cart_serializer = CartSerializer(data=cart_details)
         if not cart_serializer.is_valid():
@@ -54,8 +53,8 @@ class CartDetail(APIView):
         cart_instance = cart_serializer.save()
         cart_item_serializer.save(cart_instance=cart_instance)
         return Response({'cart_details': {
-            'total_mrp': cart_instance.total_mrp,
-            'total_sale_price': cart_instance.total_sale_price,
+            'total_mrp': round(cart_instance.total_mrp, 2),
+            'total_sale_price': round(cart_instance.total_sale_price, 2),
             'delivery_fee': cart_instance.delivery_fee,
-            'total_payable': cart_instance.total_payable
+            'total_payable': round(cart_instance.total_payable, 2)
         }})

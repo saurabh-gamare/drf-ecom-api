@@ -1,10 +1,10 @@
 from rest_framework import serializers
-from . import models
+from .models import Coupon, Cart, CartItem
 
 
 class CouponSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Coupon
+        model = Coupon
         fields = '__all__'
 
 
@@ -13,25 +13,26 @@ class CartSerializer(serializers.ModelSerializer):
     total_payable = serializers.DecimalField(read_only=True, max_digits=10, decimal_places=2)
 
     class Meta:
-        model = models.Cart
+        model = Cart
         fields = '__all__'
 
     def create(self, validated_data):
-        user = validated_data.get('user').id
-        try:
-            cart_details = models.Cart.objects.get(user=user)
-        except:
-            cart = models.Cart(**validated_data)
+        user = validated_data.get('user')
+        cart_details = Cart.objects.filter(user=user)
+        if cart_details.exists():
+            cart_details.update(**validated_data)
+        else:
+            cart = Cart(**validated_data)
             cart.save()
-            cart_details = models.Cart.objects.get(user=user)
+        cart_details = Cart.objects.get(user=user)
         return cart_details
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data['total_payable'] = float(data['total_payable'])
-        data['coupon_discount'] = float(data['coupon_discount'])
-        data['total_mrp'] = float(data['total_mrp'])
-        data['total_sale_price'] = float(data['total_sale_price'])
+        data['total_payable'] = round(float(data['total_payable']), 2)
+        data['coupon_discount'] = round(float(data['coupon_discount']), 2)
+        data['total_mrp'] = round(float(data['total_mrp']), 2)
+        data['total_sale_price'] = round(float(data['total_sale_price']), 2)
         return data
 
 
@@ -40,7 +41,7 @@ class CartProductDetailSerializer(serializers.ModelSerializer):
     quantity = serializers.IntegerField()
 
     class Meta:
-        model = models.CartItem
+        model = CartItem
         fields = ['product_id', 'quantity']
 
 
@@ -49,12 +50,24 @@ class CartItemSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         cart_instance = validated_data.get('cart_instance')
-        print(cart_instance, 'cart_instance')
-        for details in validated_data.get('cart_details'):
-            try:
-                models.CartItem.objects.get(user=cart_instance, product_id=details.get('product_id'))
-            except:
-                details.update({'user': cart_instance})
-                cart_item = models.CartItem(**dict(details))
+        cart_details = validated_data.get('cart_details')
+        existing_cart_items = CartItem.objects.filter(user=cart_instance)
+        existing_cart_products = [int(details.product_id) for details in existing_cart_items]
+        new_cart_products = [int(details.get('product_id')) for details in cart_details]
+        distinct_cart_products = list(set(existing_cart_products).symmetric_difference(set(new_cart_products)))
+        for product_id in distinct_cart_products:
+            cart_product = CartItem.objects.filter(user=cart_instance, product_id=product_id)
+            if cart_product.exists():
+                cart_product.delete()
+            else:
+                quantity = [details.get('quantity') for details in cart_details if int(details.get('product_id')) == product_id] or [0]
+                cart_item = CartItem(user=cart_instance, product_id=product_id, quantity=quantity[0])
                 cart_item.save()
+        for product_id in new_cart_products:
+            if product_id in distinct_cart_products:
+                continue
+            cart_product = CartItem.objects.filter(user=cart_instance, product_id=product_id)
+            quantity = [details.get('quantity') for details in cart_details if details.get('product_id') == product_id] or [0]
+            if cart_product.exists():
+                cart_product.update(quantity=quantity[0])
         return {}

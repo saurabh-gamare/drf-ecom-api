@@ -27,9 +27,9 @@ class Coupon(models.Model):
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     coupon = models.ForeignKey(Coupon, on_delete=models.SET_NULL, null=True)
-    coupon_discount = models.DecimalField(default=0.0, max_digits=10, decimal_places=2)
-    total_mrp = models.DecimalField(max_digits=10, decimal_places=2)
-    total_sale_price = models.DecimalField(max_digits=10, decimal_places=2)
+    coupon_discount = models.DecimalField(default=0.0, max_digits=20, decimal_places=2)
+    total_mrp = models.DecimalField(max_digits=20, decimal_places=2)
+    total_sale_price = models.DecimalField(max_digits=20, decimal_places=2)
 
     @property
     def delivery_fee(self):
