@@ -26,7 +26,7 @@ SECRET_KEY = Config.SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = Config.DEBUG
 
-ALLOWED_HOSTS = ['127.0.0.1', 'sgamare32.pythonanywhere.com']
+ALLOWED_HOSTS = Config.ALLOWED_HOSTS
 
 # Application definition
 
