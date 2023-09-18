@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Coupon, Cart, CartItem
+from .models import Coupon, Cart, CartItem, Address
 
 
 class CouponSerializer(serializers.ModelSerializer):
@@ -60,14 +60,22 @@ class CartItemSerializer(serializers.Serializer):
             if cart_product.exists():
                 cart_product.delete()
             else:
-                quantity = [details.get('quantity') for details in cart_details if int(details.get('product_id')) == product_id] or [0]
+                quantity = [details.get('quantity') for details in cart_details if
+                            int(details.get('product_id')) == product_id] or [0]
                 cart_item = CartItem(user=cart_instance, product_id=product_id, quantity=quantity[0])
                 cart_item.save()
         for product_id in new_cart_products:
             if product_id in distinct_cart_products:
                 continue
             cart_product = CartItem.objects.filter(user=cart_instance, product_id=product_id)
-            quantity = [details.get('quantity') for details in cart_details if details.get('product_id') == product_id] or [0]
+            quantity = [details.get('quantity') for details in cart_details if
+                        details.get('product_id') == product_id] or [0]
             if cart_product.exists():
                 cart_product.update(quantity=quantity[0])
         return {}
+
+
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = '__all__'

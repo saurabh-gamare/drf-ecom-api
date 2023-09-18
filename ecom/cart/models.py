@@ -50,3 +50,27 @@ class CartItem(models.Model):
 
     def __str__(self):
         return self.user.user.username
+
+
+class Address(models.Model):
+    ADDRESS_LABEL_CHOICES = [
+        ('home', 'Home'),
+        ('work', 'Work'),
+        ('other', 'Other')
+    ]
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    contact_name = models.CharField(max_length=50)
+    mobile_number = models.IntegerField(max_length=10)
+    street_address_line_1 = models.CharField(max_length=255)
+    street_address_line_2 = models.CharField(max_length=255, null=True, blank=True)
+    city = models.CharField(max_length=50)
+    state = models.CharField(max_length=50)
+    pincode = models.IntegerField(max_length=6)
+    address_label = models.CharField(max_length=5, choices=ADDRESS_LABEL_CHOICES, default='home')
+
+    class Meta:
+        verbose_name = 'Address'
+        verbose_name_plural = 'Addresses'
+
+    def __str__(self):
+        return self.user.username
