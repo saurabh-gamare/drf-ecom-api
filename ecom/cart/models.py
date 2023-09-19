@@ -60,12 +60,12 @@ class Address(models.Model):
     ]
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     contact_name = models.CharField(max_length=50)
-    mobile_number = models.IntegerField(max_length=10)
+    mobile_number = models.IntegerField()
     street_address_line_1 = models.CharField(max_length=255)
     street_address_line_2 = models.CharField(max_length=255, null=True, blank=True)
     city = models.CharField(max_length=50)
     state = models.CharField(max_length=50)
-    pincode = models.IntegerField(max_length=6)
+    pincode = models.IntegerField()
     address_label = models.CharField(max_length=5, choices=ADDRESS_LABEL_CHOICES, default='home')
 
     class Meta:
