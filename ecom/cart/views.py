@@ -1,6 +1,6 @@
 from rest_framework import generics
 from .serializers import CouponSerializer, CartSerializer, CartItemSerializer, AddressSerializer
-from .models import Coupon, Cart, CartItem, Address
+from .models import Coupon, Address
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import exceptions

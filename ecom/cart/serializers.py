@@ -79,3 +79,9 @@ class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = '__all__'
+
+    def validate_address_label(self, value):
+        address_instance = Address.objects.filter(address_label=value)
+        if address_instance.exists():
+            raise serializers.ValidationError(f'{value.capitalize()} address label already exists')
+        return value

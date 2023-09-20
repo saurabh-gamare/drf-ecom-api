@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'accounts',
     'products',
-    'cart'
+    'cart',
+    'orders'
 ]
 
 MIDDLEWARE = [
@@ -145,3 +146,5 @@ SIMPLE_JWT = {
     "ALGORITHM": "HS256",
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
+
+TIME_ZONE = 'Asia/Kolkata'
