@@ -1,5 +1,5 @@
 from rest_framework import generics
-from .serializers import ProductSerializer
+from .serializers import ProductDetailSerializer, ProductListSerializer
 from .models import Product, Category
 from rest_framework.response import Response
 from .paginations import ProductPagination
@@ -9,10 +9,10 @@ from ecom.utils import get_error_response
 
 class ProductList(generics.ListAPIView):
     queryset = Product.objects.all()
-    serializer_class = ProductSerializer
+    serializer_class = ProductListSerializer
 
     def get_queryset(self):
-        product_details = Product.objects.select_related('category').all()
+        product_details = Product.objects.all()
         return product_details
 
     def list(self, request, *args, **kwargs):
@@ -25,7 +25,7 @@ class ProductList(generics.ListAPIView):
 
 class ProductDetail(generics.RetrieveAPIView):
     queryset = Product.objects.all()
-    serializer_class = ProductSerializer
+    serializer_class = ProductDetailSerializer
 
     def retrieve(self, request, *args, **kwargs):
         product_id = request.query_params.get('id')

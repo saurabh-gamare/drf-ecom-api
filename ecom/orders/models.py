@@ -2,6 +2,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from cart.models import Address, Cart, CartItem
+from products.models import Product
 from django.utils import timezone
 import random, string
 
@@ -37,7 +38,7 @@ class Order(models.Model):
 class OrderItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     order_id = models.ForeignKey(Order, on_delete=models.CASCADE)
-    product_id = models.IntegerField()
+    product_id = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
     quantity = models.IntegerField()
 
     def __str__(self):

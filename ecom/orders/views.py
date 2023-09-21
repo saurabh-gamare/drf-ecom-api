@@ -1,8 +1,8 @@
 from rest_framework import generics
 from rest_framework.response import Response
-from .models import Order
+from .models import Order, OrderItem
 from cart.models import Cart, CartItem, Address
-from .serializers import OrderSerializer, OrderItemSerializer
+from .serializers import OrderSerializer, OrderItemSerializer, ListOrderSerializer, RetrieveOrderSerializer
 from cart.serializers import CartSerializer, CartItemSerializer, AddressSerializer
 from rest_framework.views import APIView
 from rest_framework import exceptions
@@ -12,6 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 from products.models import Product
 from rest_framework import mixins
 from django.forms.models import model_to_dict
+from .paginations import OrderPagination
 import random, string
 
 
@@ -64,3 +65,46 @@ class CreateOrder(APIView):
             order_item_serializer.save(**order_item_data)
         Cart.objects.filter(user=request.user).delete()
         return Response({'message': 'Order placed'})
+
+
+class ListOrders(generics.ListAPIView):
+    queryset = Order.objects.all()
+    serializer_class = ListOrderSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self, *args, **kwargs):
+        return Order.objects.filter(user=kwargs.get('user'))
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset(user=request.user)
+        paginator = OrderPagination()
+        instance = paginator.paginate_queryset(queryset, request)
+        serializer = self.get_serializer(instance, many=True)
+        return paginator.get_paginated_response({
+            'orders': serializer.data
+        })
+
+
+class RetrieveOrder(generics.RetrieveAPIView):
+    queryset = Order.objects.all()
+    serializer_class = RetrieveOrderSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, *args, **kwargs):
+        try:
+            instance = Order.objects.get(user=kwargs.get('user'), order_id=kwargs.get('order_id'))
+        except Exception:
+            err_response = get_error_response(message='Order not found')
+            raise exceptions.NotFound(err_response)
+        return instance
+
+    def retrieve(self, request, *args, **kwargs):
+        order_id = request.query_params.get('order')
+        if not order_id:
+            err_response = get_error_response(message='Order not found')
+            raise exceptions.NotFound(err_response)
+        instance = self.get_object(user=request.user, order_id=order_id)
+        serializer = self.get_serializer(instance)
+        return Response({'order': serializer.data})
