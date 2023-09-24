@@ -22,7 +22,7 @@ class Order(models.Model):
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True)
     order_id = models.CharField(max_length=15)
     status = models.CharField(max_length=1, choices=STATUS_FIELD_CHOICES, default='1')
-    coupon = models.CharField(max_length=15, null=True)
+    coupon = models.CharField(max_length=15, null=True, blank=True)
     coupon_discount = models.DecimalField(default=0.0, max_digits=20, decimal_places=2)
     total_mrp = models.DecimalField(max_digits=20, decimal_places=2)
     total_sale_price = models.DecimalField(max_digits=20, decimal_places=2)

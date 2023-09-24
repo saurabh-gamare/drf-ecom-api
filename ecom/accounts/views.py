@@ -3,12 +3,13 @@ from rest_framework.response import Response
 from .serializers import AuthSerializer
 from django.core.mail import send_mail
 from rest_framework import exceptions, permissions
-from django.conf import settings
 import random
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.contrib.auth import get_user_model
 from ecom.utils import get_error_response
+from .tasks import send_async_otp_email
+
 
 User = get_user_model()
 
@@ -17,23 +18,19 @@ class Auth(APIView):
 
     def send_otp_via_email(self, otp, receiver_email):
         subject = f'ECOM One-Time Password for Login: [{otp}]'
-        message = ''
         html_message = f'''
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <title>OTP for your Django Project</title>
-            </head>
             <body>
                 <h2 style='text-align:center'>OTP for your ECOM Project</h2>
                 <p style='text-align:center'>Please use this OTP to verify your account.</p>
                 <h1 style='text-align:center'>{otp}</h1>
             </body>
-            </html>
         '''
-        sender_email = settings.EMAIL_HOST_USER
-        receiver_emails = [receiver_email]
-        send_mail(subject, message, sender_email, receiver_emails, html_message=html_message)
+        email_params = {
+            'subject': subject,
+            'html_message': html_message,
+            'receiver_email': receiver_email
+        }
+        send_async_otp_email.apply_async(kwargs=email_params)
 
     def post(self, request):
         data = request.data
@@ -88,4 +85,3 @@ class Login(APIView):
                 'access': str(refresh.access_token)
             }
         })
-
