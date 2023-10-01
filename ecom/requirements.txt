@@ -5,3 +5,5 @@ django~=4.0.4
 celery~=5.3.4
 xhtml2pdf~=0.2.11
 requests~=2.31.0
+django-celery-results
+django_celery_beat
