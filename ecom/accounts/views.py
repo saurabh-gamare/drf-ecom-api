@@ -63,7 +63,7 @@ class Login(APIView):
             err_response = get_error_response(message='OTP is required')
             raise exceptions.ValidationError(err_response)
 
-    def get(self, request):
+    def post(self, request):
         data = request.data
         email = data.get('email')
         otp = data.get('otp')
