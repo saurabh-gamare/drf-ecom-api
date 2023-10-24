@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser
+from .models import CustomUser, Log
 
 
 # admin.site.register(CustomUser, UserAdmin)
@@ -42,4 +42,9 @@ class CustomUserAdmin(UserAdmin):
     )
 
 
+class LogModelAdmin(admin.ModelAdmin):
+    list_display = ('endpoint', 'created_on')
+
+
 admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(Log, LogModelAdmin)
