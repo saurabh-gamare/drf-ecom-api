@@ -19,7 +19,7 @@ class LogsMiddleware:
             endpoint = request.path
         except:
             endpoint = ''
-        if endpoint.startswith('/admin'):
+        if not endpoint.startswith('/api/v1/'):
             return ''
         try:
             headers = dict(request.headers)
