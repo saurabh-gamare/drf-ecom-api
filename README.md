@@ -23,6 +23,21 @@ This is a Django Rest Framework (DRF) project offering a range of APIs for an e-
 
 ## API Documentation
 
+- [Register API](#register-api)
+- [Login API](#login-api)
+- [Refresh Token API](#refresh-token-api)
+- [Product List API](#product-list-api)
+- [Cart Detail API](#cart-detail-api)
+- [Product Detail API](#product-detail-api)
+- [Address List/Create API](#address-list/create-api)
+- [Address Retrieve/Update/Destroy API](#address-retrieve/update/destroy-api)
+- [Order Create API](#order-create-api)
+- [Order List API](#order-list-api)
+- [Retrieve Order API](#order-retrieve-api)
+- [Sales Report API](#sales-report-api)
+
+
+
 ### Register API
 This API sends OTP to the email provided in the request. In this it creates a new user if the email is not present in the db else it bypasses the user creation process. It uses celery so that the sending of email works asynchronously resulting in less response time.
 
@@ -68,7 +83,7 @@ This API verifies the otp with the email provided in the request. If the otp is 
 
  <br>
 
- ### Refresh Token API
+ ### Refresh Token API <a id="refresh"></a>
 This API refreshes the access token after it gets expired. It takes the refresh token (which we get from the login API) in the request and sends a new access token in the response.
 
 - **Endpoint**: `/api/v1/accounts/refresh-token`
@@ -88,7 +103,7 @@ This API refreshes the access token after it gets expired. It takes the refresh 
 
 <br>
 
- ### Product List API
+ ### Product List API <a id="product-list"></a>
 This API sends the list of products according to the pagination provided in the request.
 
 - **Endpoint**: `/api/v1/products/product-list?page=1&products=2`
@@ -124,7 +139,7 @@ This API sends the list of products according to the pagination provided in the 
 
  <br>
 
- ### Product Detail API
+ ### Product Detail API <a id="product-detail"></a>
 This API sends the details of a product provided in the request.
 
 - **Endpoint**: `/api/v1/products/product-detail?id=10`
@@ -161,7 +176,7 @@ This API sends the details of a product provided in the request.
 
   <br>
 
-### Cart Detail API
+### Cart Detail API <a id="cart-detail"></a>
 This API sends the products details in the cart.
 
 - **Endpoint**: `/api/v1/cart/cart-detail`
@@ -201,7 +216,7 @@ This API sends the products details in the cart.
 
   <br>
 
-### Address List/Create API
+### Address List/Create API <a id="address-1"></a>
 This API lists the addresses when `GET` method is used and it creates an address if `POST` method is used followed by request.
 
 - **Endpoint**: `/api/v1/cart/address-list-create`
@@ -253,7 +268,7 @@ This API lists the addresses when `GET` method is used and it creates an address
 
   <br>
 
-### Address Retrieve/Update/Destroy API
+### Address Retrieve/Update/Destroy API <a id="address-2"></a>
 This API retrieves the address when `GET` method is used, updates the address when `PUT` method is used and deletes the address when `DELETE` method is used followed by request. This API also takes the address_id in the request.
 
 - **Endpoint**: `/api/v1/cart/address-retrieve-update-destroy/3`
@@ -309,7 +324,7 @@ This API retrieves the address when `GET` method is used, updates the address wh
 
 <br>
 
-### Order Create API
+### Order Create API <a id="order-create"></a>
 This API fetches the cart details from the user which is logged in and then places the order. After placing the order, cart details are deleted of that user.
 
 - **Endpoint**: `/api/v1/orders/create-order`
@@ -335,7 +350,7 @@ This API fetches the cart details from the user which is logged in and then plac
 
  <br>
 
- ### Order List API
+ ### Order List API <a id="order-list"></a>
 This API fetches all the orders of the logged in user according to pagination.
 
 - **Endpoint**: `/api/v1/orders/list-orders?page=1&orders=2`
@@ -375,7 +390,7 @@ This API fetches all the orders of the logged in user according to pagination.
 
 <br>
 
- ### Retrieve Order API
+ ### Retrieve Order API <a id="order-retrieve"></a>
 This API fetches the order from the order_id provided in the request.
 
 - **Endpoint**: `/api/v1/orders/retrieve-order?order=40JOIY4P6WOW1WX`
@@ -437,7 +452,7 @@ This API fetches the order from the order_id provided in the request.
 
 <br>
 
-### Sales Report API
+### Sales Report API <a id="sales-report"></a>
 This API creates a sales report like previous month's revenue, total revenue, yesterday's total orders, etc. The report is converted from html to pdf and then sent through the email to the superuser. Also, celery beat is used, which calls this API at a scheduled time which sends the sales report to the superuser through email.
 
 - **Endpoint**: `/api/v1/reports/sales-report`
