@@ -47,7 +47,7 @@ This API sends OTP to the email provided in the request. In this it creates a ne
 - **Request**:
   ```json
   {
-    "email": "sgamare32@gmail.com"
+    "email": "abc@gmail.com"
   }
   ```
 - **Response**:
@@ -67,7 +67,7 @@ This API verifies the otp with the email provided in the request. If the otp is 
 - **Request**:
   ```json
   {
-    "email": "sgamare32@gmail.com",
+    "email": "abc@gmail.com",
     "otp": 1904
   }
   ```
@@ -167,7 +167,7 @@ This API sends the details of a product provided in the request.
         "size": "500 g",
         "country_of_origin": "India",
         "expiry_date": "Please refer to the packaging of the product for expiry date.",
-        "customer_care": "sgamare32@gmail.com",
+        "customer_care": "abc@gmail.com",
         "seller": "Saurabh Gamare Ventures LLP",
         "fssai": "1234567890",
         "category": 1
