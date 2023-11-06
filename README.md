@@ -29,11 +29,11 @@ This is a Django Rest Framework (DRF) project offering a range of APIs for an e-
 - [Product List API](#product-list-api)
 - [Cart Detail API](#cart-detail-api)
 - [Product Detail API](#product-detail-api)
-- [Address List/Create API](#address-list/create-api)
-- [Address Retrieve/Update/Destroy API](#address-retrieve/update/destroy-api)
+- [Address List/Create API](#address-listcreate-api)
+- [Address Retrieve/Update/Destroy API](#address-retrieveupdatedestroy-api)
 - [Order Create API](#order-create-api)
 - [Order List API](#order-list-api)
-- [Retrieve Order API](#order-retrieve-api)
+- [Retrieve Order API](#retrieve-order-api)
 - [Sales Report API](#sales-report-api)
 
 
