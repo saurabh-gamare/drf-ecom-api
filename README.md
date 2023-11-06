@@ -23,6 +23,7 @@ This is a Django Rest Framework (DRF) project offering a range of APIs for an e-
 
 ## API Documentation
 
+### Table of contents
 - [Register API](#register-api)
 - [Login API](#login-api)
 - [Refresh Token API](#refresh-token-api)
@@ -36,7 +37,7 @@ This is a Django Rest Framework (DRF) project offering a range of APIs for an e-
 - [Retrieve Order API](#retrieve-order-api)
 - [Sales Report API](#sales-report-api)
 
-
+<br>
 
 ### Register API
 This API sends OTP to the email provided in the request. In this it creates a new user if the email is not present in the db else it bypasses the user creation process. It uses celery so that the sending of email works asynchronously resulting in less response time.
